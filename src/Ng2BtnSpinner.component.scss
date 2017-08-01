@@ -1,0 +1,94 @@
+// Mixins
+//**********************//
+
+@mixin transition-property($transition-property...) {
+  -webkit-transition-property: $transition-property;
+  transition-property: $transition-property;
+}
+@mixin transition-delay($transition-delay) {
+  -webkit-transition-delay: $transition-delay;
+  transition-delay: $transition-delay;
+}
+@mixin transition-duration($transition-duration...) {
+  -webkit-transition-duration: $transition-duration;
+  transition-duration: $transition-duration;
+}
+@mixin animation-iteration-count($iteration-count) {
+  -webkit-animation-iteration-count: $iteration-count;
+  animation-iteration-count: $iteration-count;
+}
+@mixin animation-duration($duration) {
+  -webkit-animation-duration: $duration;
+  animation-duration: $duration;
+}
+@mixin animation-name($name) {
+  -webkit-animation-name: $name;
+  animation-name: $name;
+}
+@mixin animation-timing-function($timing-function) {
+  -webkit-animation-timing-function: $timing-function;
+  animation-timing-function: $timing-function;
+}
+
+// Opacity
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  // IE8 filter
+  $opacity-ie: ($opacity * 100);
+  filter: alpha(opacity=$opacity-ie);
+}
+
+// Transform
+@mixin transform($transforms) {
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
+
+
+// Animations
+//**********************//
+@mixin rotate {
+  0%    { @include transform(rotate(0deg)); }
+  100%  { @include transform(rotate(360deg)); }
+}
+@keyframes rotate { @include rotate; }
+.ng2-btn-spinner {
+  position: relative;
+  padding-right: 14px;
+  &:not(.disabled) {
+    span {
+      &:after {
+        content: '';
+        position: absolute;
+        margin-top: -2px;
+        right: 5px;
+        width: 20px;
+        height: 20px;
+        border: 4px solid;
+        border-left-color: transparent;
+        border-radius: 50%;
+        @include opacity(0);
+        @include transition-duration(.5s);
+        @include transition-property(opacity);
+        @include animation-duration(1s);
+        @include animation-iteration-count(infinite);
+        @include animation-name(rotate);
+        @include animation-timing-function(linear);
+      }
+    }
+    &.loading {
+      pointer-events: none;
+      cursor: not-allowed;
+      span {
+        &:after {
+          @include transition-delay(.5s);
+          @include transition-duration(1s);
+          @include opacity(1);
+        }
+      }
+    }
+  }
+}
